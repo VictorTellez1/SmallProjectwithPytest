@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Code') {
+            steps {
+                echo 'Checking out code from GitHub'
+                //git 'https://github.com/VictorTellez1/SmallProjectwithPytest.git' No lo necesitamos porque el pipeline ya esta en el codigo
+                sh returnStatus: true, script: 'ls -l '
+            }
+        }
+        stage('Testing Code') {
+            steps {
+                echo 'Running Automation tests'
+                sh returnStatus: true, script: 'bash testscript.sh'
+            }
+        }
+         stage('Test Report Code') {
+            steps {
+                echo 'Reporting Test'
+                junit skipMarkingBuildUnstable: true, stdioRetention: '', testResults: 'xmlReport/output.xml'
+
+            }
+        }
+    }
+}
